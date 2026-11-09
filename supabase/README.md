@@ -1,5 +1,5 @@
 # Supabase
 
-No database tables or migrations are needed in this phase. The app only uses Supabase Auth
-(`auth.users`), which Supabase manages for you. Add migrations and Row Level Security policies here
-when trips, bookings or memories are saved per user.
+`migrations/` holds the SQL for the database. Apply it with the SQL editor or the Supabase CLI
+(see the main README). The `profiles` table has Row Level Security: users can only read and update
+their own row, and a trigger on `auth.users` creates the row at sign up.

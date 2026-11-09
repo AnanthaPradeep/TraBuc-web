@@ -1,8 +1,7 @@
 # TRABUC web
 
 A travel companion web app: discover destinations, sketch trips, browse camping and stays, use travel
-tools, read stories, and keep memories. **This is phase 1: a navigable UI with sample content plus a
-Supabase Auth foundation.**
+tools, read stories, and keep memories. **Phase 2: a navigable UI with sample content, Supabase Auth and a `profiles` table.**
 
 ## Quick start
 
@@ -26,7 +25,16 @@ The public pages work without it. Sign-in, sign-up and the account area need a S
    `http://localhost:5173`) and add `http://localhost:5173/reset-password` to **Redirect URLs**.
 4. Authentication > Providers > Email: enabled by default. If "Confirm email" is on, new users must open
    the emailed link before signing in (the app shows a "Check your email" screen).
-5. Restart `npm run dev` after editing `.env`.
+5. **Create the profiles table.** Open SQL Editor > New query, paste the whole contents of
+   `supabase/migrations/20261109000000_profiles.sql`, and click Run. It creates `public.profiles`
+   (`id` references `auth.users`, `full_name`, `created_at`), turns on Row Level Security so users can only
+   read and update their own row, adds a trigger that creates a profile on sign up, and backfills
+   existing users. Alternative with the CLI: `npx supabase login`, `npx supabase link --project-ref <ref>`,
+   then `npx supabase db push`.
+6. Restart `npm run dev` after editing `.env`.
+7. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
+   comes from the `profiles` table (Table Editor > profiles shows the new row). If the table is missing or
+   the query fails, the page falls back to the name saved at sign-up.
 
 Without these values the app stays runnable and shows an "Authentication is not configured" notice.
 
@@ -85,7 +93,7 @@ labelled form fields with error text, and `prefers-reduced-motion` support.
 
 ## Suggested next phase
 
-1. Persist trips and memories in Supabase with per-user Row Level Security and migrations.
+1. Persist trips and memories in Supabase (add new migrations alongside the profiles one).
 2. Real destination content and licensed imagery.
 3. Booking provider and payments, then translation and currency services.
 4. Profile editing, story publishing and uploads.
