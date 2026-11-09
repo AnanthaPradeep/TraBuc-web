@@ -1,0 +1,54 @@
+/* TEMPORARY THEME. Change values here to rebrand; nothing else hard-codes colour, type or radii. */
+:root {
+  --color-bg: #f3f4f2;
+  --color-surface: #ffffff;
+  --color-surface-2: #e9ecea;
+  --color-ink: #161b1d;
+  --color-muted: #566064;
+  --color-line: #d3d8d6;
+  --color-accent: #1e4a5a;
+  --color-accent-ink: #ffffff;
+  --color-accent-soft: #dbe7ea;
+  --color-highlight: #d8c9a6;
+  --color-focus: #0b6bcb;
+  --color-success: #1f6b3a;
+  --color-success-bg: #e3f1e7;
+  --color-warn: #7a5200;
+  --color-warn-bg: #f7ecd0;
+  --color-error: #a21e1e;
+  --color-error-bg: #f8e1e1;
+  --color-info-bg: #e4ecef;
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-h3: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+  --text-h2: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
+  --text-h1: clamp(2rem, 1.2rem + 4vw, 3.75rem);
+
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: clamp(3rem, 6vw, 5rem);
+
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgb(22 27 29 / 0.08);
+  --shadow-md: 0 8px 24px rgb(22 27 29 / 0.12);
+
+  --container: 72rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --header-h: 4rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #12171a; --color-surface: #1a2125; --color-surface-2: #222b30;
+    --color-ink: #eef1f0; --color-muted: #a3adb1; --color-line: #33403f;
+    --color-accent: #7fb6c8; --color-accent-ink: #0d1a1f; --color-accent-soft: #1f3640;
+    --color-highlight: #8a7a52; --color-focus: #6db3ff;
+    --color-success: #8fd3a5; --color-success-bg: #1a3324;
+    --color-warn: #f0cf85; --color-warn-bg: #3a2f14;
+    --color-error: #f4a3a3; --color-error-bg: #3d1c1c; --color-info-bg: #1f2c32;
+  }
+}
