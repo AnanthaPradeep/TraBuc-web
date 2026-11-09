@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { experiences, sampleBookings, type Experience } from './data'
-import { getDestination } from '../destinations/data'
+import { useDestinations } from '../destinations/DestinationsContext'
 import { Media } from '../../components/Media'
 import { Badge, ButtonLink, ComingSoonButton, EmptyState, Notice, PageHeader, PreviewBadge } from '../../components/ui'
 
 const KINDS = ['All', 'Camping', 'Stay', 'Tour'] as const
 
 function ExperienceCard({ e }: { e: Experience }) {
+  const { getDestination } = useDestinations()
   const d = getDestination(e.destinationSlug)
   return (
     <article className="dest-card">
@@ -41,6 +42,7 @@ export function BookingsPage() {
 
 export function BookingDetailPage() {
   const { id = '' } = useParams()
+  const { getDestination } = useDestinations()
   const e = experiences.find((x) => x.id === id)
   if (!e) return <div className="container section"><EmptyState title="Experience not found" action={<ButtonLink to="/bookings">Back to bookings</ButtonLink>} /></div>
   const d = getDestination(e.destinationSlug)

@@ -1,7 +1,7 @@
 import type { Destination } from './types'
 
-/** SAMPLE DATA. Replace with a real destinations source later. */
-export const destinations: Destination[] = [
+/** SAMPLE DATA used as the fallback when Supabase is not configured or unavailable. */
+const sample: Omit<Destination, 'verified'>[] = [
   { slug: 'kyoto', name: 'Kyoto', country: 'Japan', type: 'City', kind: 'popular', budget: 'Mid-range', bestMonths: [3, 4, 10, 11], lat: 35.01, lng: 135.77, elevation: 50, artSeed: 11,
     summary: 'Temples, tea houses and narrow lanes that reward slow walking.',
     highlights: ['Early-morning temple visits before the crowds', 'Day trip to the Arashiyama bamboo grove', 'Seasonal kaiseki dinners'] },
@@ -40,4 +40,8 @@ export const destinations: Destination[] = [
     highlights: ['Snorkelling off the beach', 'Bicycles and horse carts only', 'Sunset-side cafés'] },
 ]
 
-export const getDestination = (slug: string) => destinations.find((d) => d.slug === slug)
+/** Every built-in row is placeholder content, so none are verified. */
+export const sampleDestinations: Destination[] = sample.map((d) => ({ ...d, verified: false }))
+export const destinations = sampleDestinations
+
+export const getDestination = (slug: string) => sampleDestinations.find((d) => d.slug === slug)

@@ -1,18 +1,20 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
-import { destinations } from '../destinations/data'
+import { useDestinations } from '../destinations/DestinationsContext'
+import { DestinationsStatus } from '../destinations/DestinationsStatus'
 import { DestinationCard } from '../destinations/DestinationCard'
 import { formatCoords } from '../destinations/filter'
 import { ContourArt } from '../../components/ContourArt'
 import { ButtonLink, SampleBadge } from '../../components/ui'
 
-const popular = destinations.filter((d) => d.kind === 'popular').slice(0, 3)
-const hidden = destinations.filter((d) => d.kind === 'hidden').slice(0, 3)
 const quick = ['Island', 'Mountains', 'Coast', 'Desert']
 
 export function HomePage() {
   const nav = useNavigate()
+  const { destinations, loading } = useDestinations()
+  const popular = destinations.filter((d) => d.kind === 'popular').slice(0, 3)
+  const hidden = destinations.filter((d) => d.kind === 'hidden').slice(0, 3)
   const [q, setQ] = useState('')
   function submit(e: FormEvent) {
     e.preventDefault()
@@ -48,14 +50,15 @@ export function HomePage() {
 
       <section className="container section">
         <div className="section-head"><h2>Popular destinations</h2><Link to="/discover?kind=popular">See all popular</Link></div>
-        <p className="muted small"><SampleBadge /> Descriptions are placeholders for this preview.</p>
-        <ul className="card-grid">{popular.map((d) => <li key={d.slug}><DestinationCard d={d} /></li>)}</ul>
+        <DestinationsStatus />
+        {popular.some((d) => !d.verified) ? <p className="muted small"><SampleBadge /> Descriptions are placeholders for this preview.</p> : null}
+        {loading ? null : <ul className="card-grid">{popular.map((d) => <li key={d.slug}><DestinationCard d={d} /></li>)}</ul>}
       </section>
 
       <section className="band">
         <div className="container section">
           <div className="section-head"><h2>Hidden gems</h2><Link to="/discover?kind=hidden">See all hidden gems</Link></div>
-          <ul className="card-grid">{hidden.map((d) => <li key={d.slug}><DestinationCard d={d} /></li>)}</ul>
+          {loading ? null : <ul className="card-grid">{hidden.map((d) => <li key={d.slug}><DestinationCard d={d} /></li>)}</ul>}
         </div>
       </section>
 

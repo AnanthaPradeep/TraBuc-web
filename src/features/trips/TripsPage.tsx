@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { Pencil, Plus, Sparkles, Trash2 } from 'lucide-react'
 import { useTrips } from './TripsContext'
 import { formatDate, tripNights, validateTrip, type TripFormValues } from './dates'
-import { destinations, getDestination } from '../destinations/data'
+import { useDestinations } from '../destinations/DestinationsContext'
 import { useAuth } from '../auth/useAuth'
 import { Dialog } from '../../components/Dialog'
 import { Field } from '../../components/Field'
@@ -11,6 +11,7 @@ import { Media } from '../../components/Media'
 import { Badge, ButtonLink, EmptyState, Notice, PageHeader, PreviewBadge, Spinner } from '../../components/ui'
 
 function TripForm({ initial, submitLabel, onSubmit }: { initial: TripFormValues; submitLabel: string; onSubmit: (v: TripFormValues) => Promise<void> }) {
+  const { destinations } = useDestinations()
   const [v, setV] = useState<TripFormValues>(initial)
   const [errors, setErrors] = useState<ReturnType<typeof validateTrip>>({})
   const [saving, setSaving] = useState(false)
@@ -74,10 +75,11 @@ function LoadState() {
 
 export function TripsPage({ account = false }: { account?: boolean }) {
   const { trips, persisted, loading, error, addTrip } = useTrips()
+  const { getDestination, destinations } = useDestinations()
   const nav = useNavigate()
   const [params] = useSearchParams()
   const preset = params.get('destination') ?? ''
-  const [open, setOpen] = useState(Boolean(getDestination(preset)))
+  const [open, setOpen] = useState(Boolean(preset))
   const base = account ? '/account/trips' : '/trip-planner'
   const ready = !persisted || (!loading && !error)
   return (
@@ -116,7 +118,7 @@ export function TripsPage({ account = false }: { account?: boolean }) {
         </EmptyState>
       ) : null}
       <Dialog open={open} onClose={() => setOpen(false)} title="New trip">
-        <TripForm submitLabel="Add trip"
+        <TripForm key={destinations.length} submitLabel="Add trip"
           initial={{ title: '', destinationSlug: getDestination(preset) ? preset : '', startDate: '', endDate: '', notes: '' }}
           onSubmit={async (v) => { const t = await addTrip(v); setOpen(false); nav(`${base}/${t.id}`) }} />
       </Dialog>
@@ -127,6 +129,7 @@ export function TripsPage({ account = false }: { account?: boolean }) {
 export function TripDetailPage({ account = false }: { account?: boolean }) {
   const { id = '' } = useParams()
   const { getTrip, updateTrip, removeTrip, persisted, loading, error } = useTrips()
+  const { getDestination } = useDestinations()
   const nav = useNavigate()
   const base = account ? '/account/trips' : '/trip-planner'
   const [editing, setEditing] = useState(false)

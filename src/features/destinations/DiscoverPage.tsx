@@ -1,9 +1,10 @@
 import { useSearchParams } from 'react-router-dom'
-import { destinations } from './data'
+import { useDestinations } from './DestinationsContext'
+import { DestinationsStatus } from './DestinationsStatus'
 import { DestinationCard } from './DestinationCard'
 import { MONTHS, activeFilterCount, emptyFilters, filterDestinations, type DestinationFilters } from './filter'
 import type { Budget, DestinationType } from './types'
-import { EmptyState, PageHeader, SampleBadge } from '../../components/ui'
+import { EmptyState, PageHeader } from '../../components/ui'
 
 const TYPES: DestinationType[] = ['City', 'Coast', 'Desert', 'Forest', 'Island', 'Mountains']
 const BUDGETS: Budget[] = ['Budget', 'Mid-range', 'Premium']
@@ -23,6 +24,7 @@ function readFilters(p: URLSearchParams): DestinationFilters {
 
 export function DiscoverPage() {
   const [params, setParams] = useSearchParams()
+  const { destinations, loading } = useDestinations()
   const f = readFilters(params)
   const results = filterDestinations(destinations, f)
   const count = activeFilterCount(f)
@@ -40,7 +42,8 @@ export function DiscoverPage() {
 
   return (
     <div className="container section">
-      <PageHeader title="Discover destinations" intro={<>Search places by name, type, budget and best time to go. <SampleBadge /></>} />
+      <PageHeader title="Discover destinations" intro="Search places by name, type, budget and best time to go." />
+      <DestinationsStatus />
       <form className="filters" role="search" onSubmit={(e) => e.preventDefault()}>
         <div className="field filters-search">
           <label htmlFor="q">Search</label>
@@ -63,6 +66,7 @@ export function DiscoverPage() {
             <option value={0}>Any month</option>{MONTHS.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
           </select></div>
       </form>
+      {loading ? null : <>
       <div className="results-bar" aria-live="polite">
         <p>{results.length} {results.length === 1 ? 'place' : 'places'}{count ? ` with ${count} ${count === 1 ? 'filter' : 'filters'}` : ''}</p>
         {count ? <button type="button" className="btn btn-ghost" onClick={() => setParams(new URLSearchParams(), { replace: true })}>Clear filters</button> : null}
@@ -74,6 +78,7 @@ export function DiscoverPage() {
           Try a broader search, a different month, or remove a filter.
         </EmptyState>
       )}
+      </>}
     </div>
   )
 }

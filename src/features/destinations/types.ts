@@ -19,6 +19,9 @@ export interface Destination {
   /** Optional photo. Keep licence/credit in imageCredit. Falls back to generated art. */
   image?: string
   imageCredit?: string
+  imageLicense?: string
+  /** False for placeholder content that has not been reviewed. The UI shows a "Sample data" badge. */
+  verified: boolean
   /** Seed used for the generated fallback artwork. */
   artSeed: number
 }

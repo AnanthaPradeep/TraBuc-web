@@ -3,6 +3,7 @@ import { AuthProvider } from './features/auth/AuthContext'
 import { ProtectedRoute } from './features/auth/ProtectedRoute'
 import { ForgotPasswordPage, ResetPasswordPage, SignInPage, SignUpPage } from './features/auth/AuthPages'
 import { TripsProvider } from './features/trips/TripsContext'
+import { DestinationsProvider } from './features/destinations/DestinationsContext'
 import { TripDetailPage, TripsPage } from './features/trips/TripsPage'
 import { DiscoverPage } from './features/destinations/DiscoverPage'
 import { DestinationDetailPage } from './features/destinations/DestinationDetailPage'
@@ -56,9 +57,11 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <AuthProvider>
-        <TripsProvider>
-          <AppRoutes />
-        </TripsProvider>
+        <DestinationsProvider>
+          <TripsProvider>
+            <AppRoutes />
+          </TripsProvider>
+        </DestinationsProvider>
       </AuthProvider>
     </BrowserRouter>
   )

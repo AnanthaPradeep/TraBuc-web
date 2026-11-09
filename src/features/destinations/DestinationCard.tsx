@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Destination } from './types'
 import { Media } from '../../components/Media'
 import { formatCoords, formatMonths } from './filter'
+import { SampleBadge } from '../../components/ui'
 
 export function DestinationCard({ d }: { d: Destination }) {
   return (
@@ -10,7 +11,7 @@ export function DestinationCard({ d }: { d: Destination }) {
         <Media src={d.image} alt={`${d.name}, ${d.country}`} seed={d.artSeed} credit={d.imageCredit} />
         <div className="dest-card-body">
           <h3>{d.name}</h3>
-          <p className="muted">{d.country} · {d.type}</p>
+          <p className="muted">{d.country} · {d.type} {d.verified ? null : <SampleBadge />}</p>
           <p>{d.summary}</p>
           <dl className="facts">
             <div><dt>Best</dt><dd>{formatMonths(d.bestMonths)}</dd></div>

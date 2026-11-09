@@ -36,11 +36,20 @@ The public pages work without it. Sign-in, sign-up and the account area need a S
    by filename). It creates `public.trips` with Row Level Security: only signed-in users can read, create,
    update and delete their own rows, and `anon` has no access. `user_id` is filled in by the database from
    the session, so the app never sends it. With the CLI, `npx supabase db push` applies both migrations.
-7. Restart `npm run dev` after editing `.env`.
-8. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
+7. **Create the destinations table and load the sample rows.** Run these two files in the SQL Editor, in
+   this order: first `supabase/migrations/20261110000000_destinations.sql` (creates `public.destinations`
+   with RLS: anyone, signed in or not, can read; nobody can insert, update or delete through the API), then
+   `supabase/seed/destinations.sql` (inserts the 12 sample rows, all `verified = false`, and is safe to
+   re-run: it never overwrites `image_*` or `verified`). Edit or add destinations afterwards in
+   Table Editor > destinations. Set `verified = true` on a row once you have checked it, and the
+   "Sample data" badge disappears for that row.
+8. Restart `npm run dev` after editing `.env`.
+9. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
    comes from the `profiles` table (Table Editor > profiles shows the new row). If the table is missing or
    the query fails, the page falls back to the name saved at sign-up. Then create, edit and delete a trip
    under **My trips**, refresh, and confirm it persists (Table Editor > trips). A second account must not see it.
+   Open **Discover**: with the seed loaded there is no "Connect Supabase" notice, and cards show "Sample data"
+   until you mark them verified. Edit a row's `summary` in the Table Editor and refresh to see it change.
 
 Without these values the app stays runnable and shows an "Authentication is not configured" notice.
 
@@ -51,8 +60,9 @@ Without these values the app stays runnable and shows an "Authentication is not 
 
 | Area | Status |
 | --- | --- |
-| Navigation, menus, destination search and filters | Working, against sample data |
-| Destinations, stories, experiences | Sample content (labelled in the UI) |
+| Navigation, menus, destination search and filters | Working. Runs against the Supabase `destinations` table, or the built-in sample list as a fallback |
+| Destinations | Loaded from Supabase when configured, with loading and error states and a retry. If Supabase is not configured, the request fails or the table is empty, the 12 built-in sample rows are shown with a notice. A "Sample data" badge appears only on rows where `verified` is false. Needs the destinations migration and seed |
+| Stories, experiences | Sample content (labelled in the UI) |
 | Trip planner (signed in) | Trips are saved per user in Supabase: create, edit, delete, with loading and error states. Needs the trips migration |
 | Trip planner (signed out or Supabase not configured) | Local state only, with sample trips. Lost on refresh. Nothing is written to the database |
 | AI itineraries | Coming soon (button and copy only) |
@@ -81,9 +91,11 @@ The brand is undecided, so the theme is a temporary neutral one. All colours, fo
 shadows are CSS variables in `src/styles/tokens.css`, including a dark scheme. "TRABUC" is a text
 wordmark in `src/layouts/PublicLayout.tsx`. Plain CSS was used instead of Tailwind to keep dependencies small.
 
-Imagery: no photos are hotlinked because licences cannot be verified. Each destination falls back to
-generated contour artwork. To use photos, set `image` and `imageCredit` on an item in
-`src/features/destinations/data.ts`; broken URLs fall back automatically.
+Imagery: no photos are hotlinked because licences cannot be verified, and the seed leaves the image
+fields empty. Each destination falls back to generated contour artwork. To use a photo, set `image_url`,
+`image_credit` and `image_license` on the row in Supabase (only for images whose licence you have
+checked; only http(s) URLs are used). The credit is shown over the photo. Broken URLs fall back to the
+artwork automatically.
 
 ## Accessibility
 
@@ -101,6 +113,6 @@ labelled form fields with error text, and `prefers-reduced-motion` support.
 ## Suggested next phase
 
 1. Persist memories in Supabase (add new migrations alongside the profiles and trips ones).
-2. Real destination content and licensed imagery.
+2. Real, reviewed destination content (set `verified = true`) and licensed imagery.
 3. Booking provider and payments, then translation and currency services.
 4. Profile editing, story publishing and uploads.

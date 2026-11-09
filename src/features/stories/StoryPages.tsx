@@ -1,10 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import { getStory, stories } from './data'
-import { getDestination } from '../destinations/data'
+import { useDestinations } from '../destinations/DestinationsContext'
 import { Media } from '../../components/Media'
 import { Badge, ButtonLink, ComingSoonButton, EmptyState, EmptyState as Empty, Notice, PageHeader, SampleBadge } from '../../components/ui'
 
 export function StoriesPage() {
+  const { getDestination } = useDestinations()
   return (
     <div className="container section">
       <PageHeader title="Travel stories" intro={<>Read how other travellers experience a place. <SampleBadge /></>}
@@ -26,6 +27,7 @@ export function StoriesPage() {
 
 export function StoryDetailPage() {
   const { slug = '' } = useParams()
+  const { getDestination } = useDestinations()
   const s = getStory(slug)
   if (!s) return <div className="container section"><EmptyState title="Story not found" action={<ButtonLink to="/stories">Back to stories</ButtonLink>} /></div>
   const d = getDestination(s.destinationSlug)
