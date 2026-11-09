@@ -8,7 +8,7 @@ import { useTrips } from '../trips/TripsContext'
 
 export function AccountPage() {
   const { user } = useAuth()
-  const { trips } = useTrips()
+  const { trips, persisted, loading } = useTrips()
   const [profile, setProfile] = useState<Profile | null>(null)
   const userId = user?.id
   useEffect(() => {
@@ -30,7 +30,7 @@ export function AccountPage() {
       <p className="muted">Editing your profile is <Badge tone="preview">coming soon</Badge>. To change your password, <Link to="/forgot-password">request a reset link</Link>.</p>
       <h2>At a glance</h2>
       <ul className="list-plain">
-        <li><Link to="/account/trips">My trips</Link> <span className="muted">· {trips.length} in this session (not saved)</span></li>
+        <li><Link to="/account/trips">My trips</Link> <span className="muted">· {persisted ? (loading ? 'loading…' : `${trips.length} saved`) : `${trips.length} in this session (not saved)`}</span></li>
         <li><Link to="/account/bookings">My bookings</Link> <span className="muted">· preview</span></li>
         <li><Link to="/account/memories">Memories</Link> <span className="muted">· coming soon</span></li>
       </ul>

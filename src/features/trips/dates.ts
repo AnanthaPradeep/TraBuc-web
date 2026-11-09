@@ -16,9 +16,11 @@ export interface TripFormValues { title: string; destinationSlug: string; startD
 export function validateTrip(v: TripFormValues): Partial<Record<keyof TripFormValues, string>> {
   const errors: Partial<Record<keyof TripFormValues, string>> = {}
   if (!v.title.trim()) errors.title = 'Give your trip a name.'
+  else if (v.title.trim().length > 120) errors.title = 'Keep the name to 120 characters or fewer.'
   if (!v.destinationSlug) errors.destinationSlug = 'Choose a destination.'
   if (!v.startDate) errors.startDate = 'Choose a start date.'
   if (!v.endDate) errors.endDate = 'Choose an end date.'
   if (v.startDate && v.endDate && v.endDate < v.startDate) errors.endDate = 'End date must be on or after the start date.'
+  if (v.notes.trim().length > 2000) errors.notes = 'Keep notes to 2000 characters or fewer.'
   return errors
 }

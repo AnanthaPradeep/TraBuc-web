@@ -31,10 +31,16 @@ The public pages work without it. Sign-in, sign-up and the account area need a S
    read and update their own row, adds a trigger that creates a profile on sign up, and backfills
    existing users. Alternative with the CLI: `npx supabase login`, `npx supabase link --project-ref <ref>`,
    then `npx supabase db push`.
-6. Restart `npm run dev` after editing `.env`.
-7. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
+6. **Create the trips table.** In a new SQL query, paste the whole contents of
+   `supabase/migrations/20261109010000_trips.sql` and Run it (run the profiles migration first; order is
+   by filename). It creates `public.trips` with Row Level Security: only signed-in users can read, create,
+   update and delete their own rows, and `anon` has no access. `user_id` is filled in by the database from
+   the session, so the app never sends it. With the CLI, `npx supabase db push` applies both migrations.
+7. Restart `npm run dev` after editing `.env`.
+8. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
    comes from the `profiles` table (Table Editor > profiles shows the new row). If the table is missing or
-   the query fails, the page falls back to the name saved at sign-up.
+   the query fails, the page falls back to the name saved at sign-up. Then create, edit and delete a trip
+   under **My trips**, refresh, and confirm it persists (Table Editor > trips). A second account must not see it.
 
 Without these values the app stays runnable and shows an "Authentication is not configured" notice.
 
@@ -47,7 +53,8 @@ Without these values the app stays runnable and shows an "Authentication is not 
 | --- | --- |
 | Navigation, menus, destination search and filters | Working, against sample data |
 | Destinations, stories, experiences | Sample content (labelled in the UI) |
-| Trip planner | Working in local state only. Lost on refresh. Not saved anywhere |
+| Trip planner (signed in) | Trips are saved per user in Supabase: create, edit, delete, with loading and error states. Needs the trips migration |
+| Trip planner (signed out or Supabase not configured) | Local state only, with sample trips. Lost on refresh. Nothing is written to the database |
 | AI itineraries | Coming soon (button and copy only) |
 | Bookings and payments | Preview only. Nothing can be booked or paid for |
 | Language and currency tools | Preview only. No translations or exchange rates are shown |
@@ -85,7 +92,7 @@ labelled form fields with error text, and `prefers-reduced-motion` support.
 
 ## Known limitations
 
-- Trips, filters and sample content are not persisted.
+- Signed-out trips, filters and sample content are not persisted. Trips are not migrated into an account on sign-in.
 - No end-to-end test against live Supabase. Unit and component tests cover filtering, validation,
   trip helpers and the protected route.
 - Dates are shown in a fixed `en-GB` format and sample prices are USD.
@@ -93,7 +100,7 @@ labelled form fields with error text, and `prefers-reduced-motion` support.
 
 ## Suggested next phase
 
-1. Persist trips and memories in Supabase (add new migrations alongside the profiles one).
+1. Persist memories in Supabase (add new migrations alongside the profiles and trips ones).
 2. Real destination content and licensed imagery.
 3. Booking provider and payments, then translation and currency services.
 4. Profile editing, story publishing and uploads.

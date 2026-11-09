@@ -62,7 +62,7 @@ export function HomePage() {
       <section className="container section">
         <h2>What you can do here</h2>
         <ul className="feature-list">
-          <li><h3><Link to="/trip-planner">Plan trips</Link></h3><p>Add dates and notes for each trip. Saving to your account comes later.</p></li>
+          <li><h3><Link to="/trip-planner">Plan trips</Link></h3><p>Add dates and notes for each trip. Sign in to save them to your account.</p></li>
           <li><h3><Link to="/bookings">Browse camping and stays</Link></h3><p>See the kinds of experiences planned. Booking is not live yet.</p></li>
           <li><h3><Link to="/tools">Use travel tools</Link></h3><p>Language and currency help are in preview.</p></li>
           <li><h3><Link to="/stories">Read travel stories</Link></h3><p>Sample stories show how memories will be shared.</p></li>
