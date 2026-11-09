@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { useAuth } from '../features/auth/useAuth'
+import { Logo } from '../components/Logo'
 
 export const publicNav = [
   { to: '/discover', label: 'Discover' },
@@ -10,10 +11,6 @@ export const publicNav = [
   { to: '/tools', label: 'Travel tools' },
   { to: '/stories', label: 'Stories' },
 ]
-
-export function Wordmark() {
-  return <Link to="/" className="wordmark" aria-label="TRABUC home">TRABUC</Link>
-}
 
 function linkClass({ isActive }: { isActive: boolean }) {
   return isActive ? 'nav-link is-active' : 'nav-link'
@@ -49,7 +46,7 @@ export function PublicLayout() {
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
         <div className="container header-row">
-          <Wordmark />
+          <Logo />
           <nav className="nav-desktop" aria-label="Main">
             {publicNav.map((n) => <NavLink key={n.to} to={n.to} className={linkClass}>{n.label}</NavLink>)}
           </nav>
@@ -73,7 +70,7 @@ export function PublicLayout() {
       <footer className="site-footer">
         <div className="container footer-grid">
           <div>
-            <Wordmark />
+            <Logo />
             <p className="muted">A travel companion for discovering places, planning trips and keeping memories.</p>
           </div>
           <nav aria-label="Explore"><h2 className="footer-title">Explore</h2>

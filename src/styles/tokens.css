@@ -1,23 +1,50 @@
-/* TEMPORARY THEME. Change values here to rebrand; nothing else hard-codes colour, type or radii. */
+/*
+  TRABUC THEME. Every colour, font, radius and shadow lives here; nothing else hard-codes colour.
+
+  Brand colours (final):  black #010101 · olive #74743a · beige #e8e3d8
+  Derived from them (mixes of the three, plus white for the lightest tint of beige): surface, surface-2, muted,
+  line, border-strong, accent, accent-hover, accent-soft, info-bg, and the dark-theme equivalents.
+  NOT derived from the brand colours (semantic hues, tinted with beige/black to sit in the palette):
+  success, warn, error and their backgrounds.
+
+  Olive #74743a is only 3.8:1 on beige and 4.3:1 with black text, so it is used for large text, borders,
+  icons and decoration (--color-brand). Text, links and buttons use --color-accent (a darker olive on beige,
+  a lighter olive on black), which passes 4.5:1. See README "Design and theming" for the contrast table.
+*/
 :root {
-  --color-bg: #f3f4f2;
-  --color-surface: #ffffff;
-  --color-surface-2: #e9ecea;
-  --color-ink: #161b1d;
-  --color-muted: #566064;
-  --color-line: #d3d8d6;
-  --color-accent: #1e4a5a;
-  --color-accent-ink: #ffffff;
-  --color-accent-soft: #dbe7ea;
-  --color-highlight: #d8c9a6;
-  --color-focus: #0b6bcb;
-  --color-success: #1f6b3a;
-  --color-success-bg: #e3f1e7;
-  --color-warn: #7a5200;
-  --color-warn-bg: #f7ecd0;
-  --color-error: #a21e1e;
-  --color-error-bg: #f8e1e1;
-  --color-info-bg: #e4ecef;
+  /* brand */
+  --brand-black: #010101;
+  --brand-olive: #74743a;
+  --brand-beige: #e8e3d8;
+
+  /* light theme */
+  --color-bg: #e8e3d8;
+  --color-surface: #f5f2ed;
+  --color-surface-2: #dad6c5;
+  --color-ink: #010101;
+  --color-muted: #464542;
+  --color-line: #bfbca1;
+  --color-border-strong: #5f5f30;
+  --color-brand: #74743a;
+  --color-accent: #464623;
+  --color-accent-hover: #35351b;
+  --color-accent-ink: #e8e3d8;
+  --color-accent-soft: #cecbb5;
+  --color-focus: #010101;
+  --color-success: #305020;
+  --color-success-bg: #ccd1b5;
+  --color-warn: #684400;
+  --color-warn-bg: #e3d0ab;
+  --color-error: #8c241d;
+  --color-error-bg: #e0c3b8;
+  --color-info-bg: #d5d1bf;
+  --color-scrim: rgb(1 1 1 / 0.72);
+  --color-on-scrim: var(--brand-beige);
+  --color-overlay: rgb(1 1 1 / 0.55);
+  --shadow-sm: 0 1px 2px rgb(1 1 1 / 0.10);
+  --shadow-md: 0 8px 24px rgb(1 1 1 / 0.14);
+  --logo-light-display: block;
+  --logo-dark-display: none;
 
   --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -33,22 +60,73 @@
   --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: clamp(3rem, 6vw, 5rem);
 
   --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px rgb(22 27 29 / 0.08);
-  --shadow-md: 0 8px 24px rgb(22 27 29 / 0.12);
 
   --container: 72rem;
   --gutter: clamp(1rem, 4vw, 2rem);
   --header-h: 4rem;
+  --logo-h: 2.25rem;
 }
 
+/* dark theme: follows the system unless the page is forced to light */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-bg: #12171a; --color-surface: #1a2125; --color-surface-2: #222b30;
-    --color-ink: #eef1f0; --color-muted: #a3adb1; --color-line: #33403f;
-    --color-accent: #7fb6c8; --color-accent-ink: #0d1a1f; --color-accent-soft: #1f3640;
-    --color-highlight: #8a7a52; --color-focus: #6db3ff;
-    --color-success: #8fd3a5; --color-success-bg: #1a3324;
-    --color-warn: #f0cf85; --color-warn-bg: #3a2f14;
-    --color-error: #f4a3a3; --color-error-bg: #3d1c1c; --color-info-bg: #1f2c32;
+    --color-bg: #010101;
+    --color-surface: #111110;
+    --color-surface-2: #1d1c1b;
+    --color-ink: #e8e3d8;
+    --color-muted: #a7a49c;
+    --color-line: #2f2e2c;
+    --color-border-strong: #797771;
+    --color-brand: #74743a;
+    --color-accent: #a5a37c;
+    --color-accent-hover: #b4b191;
+    --color-accent-ink: #010101;
+    --color-accent-soft: #2f2f18;
+    --color-focus: #e8e3d8;
+    --color-success: #9bc47a;
+    --color-success-bg: #212c12;
+    --color-warn: #e4b863;
+    --color-warn-bg: #352810;
+    --color-error: #e88d83;
+    --color-error-bg: #3a1512;
+    --color-info-bg: #212111;
+    --color-scrim: rgb(1 1 1 / 0.78);
+    --color-on-scrim: var(--brand-beige);
+    --color-overlay: rgb(1 1 1 / 0.7);
+    --shadow-sm: 0 1px 2px rgb(1 1 1 / 0.6);
+    --shadow-md: 0 8px 24px rgb(1 1 1 / 0.7);
+    --logo-light-display: none;
+    --logo-dark-display: block;
   }
+}
+
+/* dark theme: forced with data-theme="dark" */
+:root[data-theme="dark"] {
+  --color-bg: #010101;
+  --color-surface: #111110;
+  --color-surface-2: #1d1c1b;
+  --color-ink: #e8e3d8;
+  --color-muted: #a7a49c;
+  --color-line: #2f2e2c;
+  --color-border-strong: #797771;
+  --color-brand: #74743a;
+  --color-accent: #a5a37c;
+  --color-accent-hover: #b4b191;
+  --color-accent-ink: #010101;
+  --color-accent-soft: #2f2f18;
+  --color-focus: #e8e3d8;
+  --color-success: #9bc47a;
+  --color-success-bg: #212c12;
+  --color-warn: #e4b863;
+  --color-warn-bg: #352810;
+  --color-error: #e88d83;
+  --color-error-bg: #3a1512;
+  --color-info-bg: #212111;
+  --color-scrim: rgb(1 1 1 / 0.78);
+  --color-on-scrim: var(--brand-beige);
+  --color-overlay: rgb(1 1 1 / 0.7);
+  --shadow-sm: 0 1px 2px rgb(1 1 1 / 0.6);
+  --shadow-md: 0 8px 24px rgb(1 1 1 / 0.7);
+  --logo-light-display: none;
+  --logo-dark-display: block;
 }

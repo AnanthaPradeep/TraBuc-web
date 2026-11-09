@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { CalendarCheck, Compass, Images, LogOut, Map, User } from 'lucide-react'
 import { useAuth } from '../features/auth/useAuth'
-import { Wordmark } from './PublicLayout'
+import { Logo } from '../components/Logo'
 
 const items = [
   { to: '/account', label: 'Profile', icon: User, end: true },
@@ -35,7 +35,7 @@ export function AccountLayout() {
       <a className="skip-link" href="#main">Skip to content</a>
       <header className="site-header">
         <div className="container header-row">
-          <Wordmark />
+          <Logo />
           <Link className="btn btn-ghost account-explore" to="/discover"><Compass size={18} aria-hidden="true" /> Explore</Link>
           <div className="profile-menu" ref={ref}>
             <button className="btn btn-secondary" aria-expanded={menu} aria-haspopup="true" onClick={() => setMenu(!menu)}>

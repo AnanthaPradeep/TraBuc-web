@@ -97,13 +97,67 @@ src/
     auth/ destinations/ trips/ bookings/ tools/ stories/ site/
   lib/supabase.ts   client + env validation
   styles/       tokens.css (theme), base.css, components.css
+  assets/brand/ logo SVGs (light and dark), imported through Vite
 ```
 
 ## Design and theming
 
-The brand is undecided, so the theme is a temporary neutral one. All colours, fonts, spacing, radii and
-shadows are CSS variables in `src/styles/tokens.css`, including a dark scheme. "TRABUC" is a text
-wordmark in `src/layouts/PublicLayout.tsx`. Plain CSS was used instead of Tailwind to keep dependencies small.
+The theme is the TRABUC brand palette: **black `#010101`, olive `#74743a`, beige `#e8e3d8`**. Every colour,
+font, spacing, radius and shadow is a CSS variable in `src/styles/tokens.css`, and no other stylesheet or
+component hard-codes a colour. The light theme (beige background, near-black text, olive accent) is the
+default; the dark theme (black background, beige text, lightened olive accent) applies automatically with
+`prefers-color-scheme: dark`, and either can be forced with `data-theme="light"` or `data-theme="dark"` on
+`<html>`.
+
+### Tokens
+
+| Token (`--color-…`) | Light | Dark | Used for | How it was derived |
+| --- | --- | --- | --- | --- |
+| `bg` | `#E8E3D8` | `#010101` | Page background | brand beige / brand black |
+| `surface` | `#F5F2ED` | `#111110` | Cards, inputs, menus | beige tinted toward white / black mixed with beige |
+| `surface-2` | `#DAD6C5` | `#1D1C1B` | Bands, footer, hover | beige mixed with olive / black mixed with beige |
+| `ink` | `#010101` | `#E8E3D8` | Body text | brand black / brand beige |
+| `muted` | `#464542` | `#A7A49C` | Secondary text | black mixed with beige |
+| `line` | `#BFBCA1` | `#2F2E2C` | Decorative dividers and card borders | beige mixed with olive / black mixed with beige |
+| `border-strong` | `#5F5F30` | `#797771` | Form-control and button borders (3:1 needed) | olive darkened with black / black mixed with beige |
+| `brand` | `#74743A` | `#74743A` | Large text, icons, art, decoration | brand olive #74743a (both themes) |
+| `accent` | `#464623` | `#A5A37C` | Links, primary buttons, small olive text | olive darkened with black / olive lightened with beige |
+| `accent-hover` | `#35351B` | `#B4B191` | Primary button hover | darker / lighter step of accent |
+| `accent-ink` | `#E8E3D8` | `#010101` | Text on accent | beige / black |
+| `accent-soft` | `#CECBB5` | `#2F2F18` | Soft olive fill (media, hover) | beige mixed with olive / black mixed with olive |
+| `focus` | `#010101` | `#E8E3D8` | Focus ring (3px, 2px offset) | black / beige |
+| `success, warn, error (+ -bg)` | `#305020`, `#684400`, `#8C241D` | `#9BC47A`, `#E4B863`, `#E88D83` | Notices and badges | semantic hues, not from the brand colours; tinted with beige/black |
+| `info-bg` | `#D5D1BF` | `#212111` | Info notices and Sample badge | beige mixed with olive / black mixed with olive |
+
+Olive `#74743a` alone is only 3.8:1 on beige (4.3:1 on black), and neither beige (3.8:1) nor black (4.3:1)
+text reaches 4.5:1 on it. So `--color-brand` (exact olive) is used only for large text, icons, borders and
+art, while text, links and buttons use `--color-accent`. All text pairings in both themes are 4.5:1 or
+better and control borders and focus rings are 3:1 or better. The whole site was audited in headless Chrome
+at 320, 375, 768, 1024 and 1440 px in both themes (computed text contrast, horizontal overflow, logo
+visibility); the exact ratios are in the pull request / commit notes.
+
+### Changing the brand
+
+1. Edit the three `--brand-*` values and the `--color-*` values in `src/styles/tokens.css` (the light values
+   are in `:root`; the dark values appear twice, in the `prefers-color-scheme` block and in
+   `:root[data-theme="dark"]`, so keep them in sync).
+2. Re-check contrast (text 4.5:1, large text and UI borders 3:1) before committing.
+3. Update `theme-color` in `index.html`.
+
+### Logo and icons
+
+- `src/assets/brand/logo-horizontal-light.svg` (black `#010101`, for the light theme) and
+  `logo-horizontal-dark.svg` (beige `#e8e3d8`, for the dark theme) are rendered by
+  `src/components/Logo.tsx`, imported through Vite so they are hashed and cached. CSS shows the one that
+  matches the theme. The link has the accessible name "TRABUC home", and a text "TRABUC" is shown if the image fails.
+- `public/favicon.svg`, `public/favicon-32.png` and `public/apple-touch-icon.png` are the TB icon in beige on a
+  black tile.
+- These are recoloured, size-optimised copies of the horizontal logo and icon from the original
+  `TraBuc_Playful_Logo_Kit` (kept outside the repo, unmodified). The kit's own README says the artwork was
+  auto-traced from an AI-generated concept, is not an editable vector master, and has no trademark check.
+  Have it reviewed (and ideally redrawn) before large-scale printing or filing a trademark.
+
+Plain CSS is used instead of Tailwind to keep dependencies small.
 
 Imagery: no photos are hotlinked because licences cannot be verified, and the seed leaves the image
 fields empty. Each destination falls back to generated contour artwork. To use a photo, set `image_url`,
