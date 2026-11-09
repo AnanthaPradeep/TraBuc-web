@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { ContourArt } from './ContourArt'
 
-interface Props { src?: string; alt: string; seed: number; credit?: string }
+interface Props { src?: string; alt: string; seed: number; credit?: string; onError?: () => void }
 
 /** Shows a photo when available; falls back to generated artwork if it is missing or fails. */
-export function Media({ src, alt, seed, credit }: Props) {
+export function Media({ src, alt, seed, credit, onError }: Props) {
   const [failed, setFailed] = useState(false)
   return (
     <div className="media">
       {src && !failed ? (
-        <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
+        <img src={src} alt={alt} loading="lazy" onError={() => { setFailed(true); onError?.() }} />
       ) : (
         <ContourArt seed={seed} label={`Generated map artwork for ${alt}`} />
       )}

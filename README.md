@@ -43,13 +43,25 @@ The public pages work without it. Sign-in, sign-up and the account area need a S
    re-run: it never overwrites `image_*` or `verified`). Edit or add destinations afterwards in
    Table Editor > destinations. Set `verified = true` on a row once you have checked it, and the
    "Sample data" badge disappears for that row.
-8. Restart `npm run dev` after editing `.env`.
-9. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
+8. **Create memories and the photo bucket.** Run `supabase/migrations/20261111000000_memories.sql` in the SQL
+   Editor (after the trips migration, because a memory can link to a trip). It creates `public.memories`
+   with RLS (signed-in users only, own rows only, `user_id` set by the database, a linked trip must be
+   yours) and, in the same file, the **private** storage bucket `memory-photos` (JPEG, PNG or WebP, 5 MB
+   max) with storage policies that only allow each user to read, upload, replace and delete files under
+   their own `{user id}/` folder. No service-role key is needed.
+   **Check the bucket:** Storage > Buckets > `memory-photos` should show as **Private** (no "Public"
+   label) with a 5 MB limit and the three image types. If it is missing or public, re-run the migration's
+   `insert into storage.buckets ...` statement; do not make the bucket public.
+9. Restart `npm run dev` after editing `.env`.
+10. Check it: sign up with a name, confirm the email if required, sign in, and open **Account**. The name
    comes from the `profiles` table (Table Editor > profiles shows the new row). If the table is missing or
    the query fails, the page falls back to the name saved at sign-up. Then create, edit and delete a trip
    under **My trips**, refresh, and confirm it persists (Table Editor > trips). A second account must not see it.
    Open **Discover**: with the seed loaded there is no "Connect Supabase" notice, and cards show "Sample data"
    until you mark them verified. Edit a row's `summary` in the Table Editor and refresh to see it change.
+    Then open **Account > Memories**: add a memory with a small photo, refresh and confirm both persist
+    (Table Editor > memories; Storage > memory-photos > your user id folder). Delete it and confirm the
+    photo file is gone too. A second account must not see either.
 
 Without these values the app stays runnable and shows an "Authentication is not configured" notice.
 
@@ -68,7 +80,9 @@ Without these values the app stays runnable and shows an "Authentication is not 
 | AI itineraries | Coming soon (button and copy only) |
 | Bookings and payments | Preview only. Nothing can be booked or paid for |
 | Language and currency tools | Preview only. No translations or exchange rates are shown |
-| Story publishing, memories, uploads | Coming soon |
+| Memories (signed in) | Private notes and photos saved per user: add, edit, delete (also deletes the photo file), optional trip link, image preview, file type and size checks. Photos are shown through short-lived signed URLs from a private bucket. Needs the memories migration |
+| Memories (signed out or Supabase not configured) | Not available: the page says so and shows no upload controls. Nothing is saved |
+| Story publishing | Coming soon |
 | Contact form | Disabled. It is not connected to an inbox |
 | Email/password auth, session persistence, protected routes, password reset | Implemented with Supabase Auth. Needs your credentials |
 | Social login | Not included |
@@ -107,12 +121,13 @@ labelled form fields with error text, and `prefers-reduced-motion` support.
 - Signed-out trips, filters and sample content are not persisted. Trips are not migrated into an account on sign-in.
 - No end-to-end test against live Supabase. Unit and component tests cover filtering, validation,
   trip helpers and the protected route.
+- Photo files are removed when you delete a memory or replace its photo (best effort: the app warns if that fails). Deleting a whole user account removes their rows but not their files in storage; clear the `{user id}/` folder in the dashboard if needed.
 - Dates are shown in a fixed `en-GB` format and sample prices are USD.
 - Single JS bundle (about 100 kB gzipped); route-level code splitting is a later improvement.
 
 ## Suggested next phase
 
-1. Persist memories in Supabase (add new migrations alongside the profiles and trips ones).
+1. Story publishing, and sharing memories on purpose (they are private today).
 2. Real, reviewed destination content (set `verified = true`) and licensed imagery.
 3. Booking provider and payments, then translation and currency services.
 4. Profile editing, story publishing and uploads.

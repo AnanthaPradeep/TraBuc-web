@@ -32,7 +32,7 @@ export function AccountPage() {
       <ul className="list-plain">
         <li><Link to="/account/trips">My trips</Link> <span className="muted">· {persisted ? (loading ? 'loading…' : `${trips.length} saved`) : `${trips.length} in this session (not saved)`}</span></li>
         <li><Link to="/account/bookings">My bookings</Link> <span className="muted">· preview</span></li>
-        <li><Link to="/account/memories">Memories</Link> <span className="muted">· coming soon</span></li>
+        <li><Link to="/account/memories">Memories</Link> <span className="muted">· private notes and photos</span></li>
       </ul>
     </div>
   )

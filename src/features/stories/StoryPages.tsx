@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getStory, stories } from './data'
 import { useDestinations } from '../destinations/DestinationsContext'
 import { Media } from '../../components/Media'
-import { Badge, ButtonLink, ComingSoonButton, EmptyState, EmptyState as Empty, Notice, PageHeader, SampleBadge } from '../../components/ui'
+import { Badge, ButtonLink, ComingSoonButton, EmptyState, Notice, PageHeader, SampleBadge } from '../../components/ui'
 
 export function StoriesPage() {
   const { getDestination } = useDestinations()
@@ -43,12 +43,3 @@ export function StoryDetailPage() {
   )
 }
 
-export function MemoriesPage() {
-  return (
-    <div>
-      <PageHeader title="Memories" intro="Photos and notes from your trips will live here." />
-      <Empty title="No memories yet">Uploading photos and saving memories is coming soon. When it is ready, your memories will be private to your account by default.</Empty>
-      <div className="btn-row"><ComingSoonButton>Add a memory</ComingSoonButton></div>
-    </div>
-  )
-}
