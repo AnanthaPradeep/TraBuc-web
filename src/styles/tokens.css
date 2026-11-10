@@ -1,48 +1,54 @@
 /*
   TRABUC THEME. Every colour, font, radius and shadow lives here; nothing else hard-codes colour.
 
-  Brand colours (final):  black #010101 · olive #74743a · beige #e8e3d8
-  Derived from them (mixes of the three, plus white for the lightest tint of beige): surface, surface-2, muted,
-  line, border-strong, accent, accent-hover, accent-soft, info-bg, and the dark-theme equivalents.
-  NOT derived from the brand colours (semantic hues, tinted with beige/black to sit in the palette):
-  success, warn, error and their backgrounds.
+  Brand palette (final):  near black #111111 · charcoal #2f2f2f · off white #f6f6f6 · amber #ffcb74
 
-  Olive #74743a is only 3.8:1 on beige and 4.3:1 with black text, so it is used for large text, borders,
-  icons and decoration (--color-brand). Text, links and buttons use --color-accent (a darker olive on beige,
-  a lighter olive on black), which passes 4.5:1. See README "Design and theming" for the contrast table.
+  Derived from those four (mixes of them; white is used only as the lightest tint of off white):
+    light:  surface (white), surface-2, line, accent-hover, accent-edge, accent-soft, warn, warn-bg, info-bg
+    dark:   surface-2, muted, border-strong, accent-hover, accent-soft, info-bg
+  Not derived (semantic hues, tinted with the palette so they sit in it): success, error and their backgrounds.
+
+  Amber is 12.6:1 on #111111 but only 1.4:1 on #f6f6f6. So in the light theme amber is ONLY a fill
+  (primary buttons, selected chips, highlights) with #111111 text on it, never text, a link or a thin icon;
+  --color-link and --color-accent-fg (text, links, icons, underlines) are #111111 there and amber in the dark theme.
+  See README "Design and theming" for the contrast table.
 */
 :root {
   /* brand */
-  --brand-black: #010101;
-  --brand-olive: #74743a;
-  --brand-beige: #e8e3d8;
+  --brand-black: #111111;
+  --brand-charcoal: #2f2f2f;
+  --brand-off-white: #f6f6f6;
+  --brand-amber: #ffcb74;
 
   /* light theme */
-  --color-bg: #e8e3d8;
-  --color-surface: #f5f2ed;
-  --color-surface-2: #dad6c5;
-  --color-ink: #010101;
-  --color-muted: #464542;
-  --color-line: #bfbca1;
-  --color-border-strong: #5f5f30;
-  --color-brand: #74743a;
-  --color-accent: #464623;
-  --color-accent-hover: #35351b;
-  --color-accent-ink: #e8e3d8;
-  --color-accent-soft: #cecbb5;
-  --color-focus: #010101;
-  --color-success: #305020;
-  --color-success-bg: #ccd1b5;
-  --color-warn: #684400;
-  --color-warn-bg: #e3d0ab;
-  --color-error: #8c241d;
-  --color-error-bg: #e0c3b8;
-  --color-info-bg: #d5d1bf;
-  --color-scrim: rgb(1 1 1 / 0.72);
-  --color-on-scrim: var(--brand-beige);
-  --color-overlay: rgb(1 1 1 / 0.55);
-  --shadow-sm: 0 1px 2px rgb(1 1 1 / 0.10);
-  --shadow-md: 0 8px 24px rgb(1 1 1 / 0.14);
+  --color-bg: #f6f6f6;
+  --color-surface: #ffffff;
+  --color-surface-2: #e6e6e6;
+  --color-ink: #111111;
+  --color-muted: #2f2f2f;
+  --color-line: #cecece;
+  --color-border-strong: #2f2f2f;
+  --color-link: #111111;
+  --color-accent: #ffcb74;
+  --color-accent-hover: #e2b568;
+  --color-accent-ink: #111111;
+  --color-accent-edge: #6b5837;
+  --color-accent-soft: #f9e9cf;
+  --color-accent-fg: #111111;
+  --color-focus: #111111;
+  --color-focus-inner: #ffcb74;
+  --color-success: #245739;
+  --color-success-bg: #d6e3db;
+  --color-warn: #413625;
+  --color-warn-bg: #fae0b5;
+  --color-error: #9d3126;
+  --color-error-bg: #efdddc;
+  --color-info-bg: #e2e2e2;
+  --color-scrim: rgb(17 17 17 / 0.78);
+  --color-on-scrim: var(--brand-off-white);
+  --color-overlay: rgb(17 17 17 / 0.55);
+  --shadow-sm: 0 1px 2px rgb(17 17 17 / 0.10);
+  --shadow-md: 0 8px 24px rgb(17 17 17 / 0.14);
   --logo-light-display: block;
   --logo-dark-display: none;
 
@@ -70,31 +76,34 @@
 /* dark theme: follows the system unless the page is forced to light */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-bg: #010101;
-    --color-surface: #111110;
-    --color-surface-2: #1d1c1b;
-    --color-ink: #e8e3d8;
-    --color-muted: #a7a49c;
-    --color-line: #2f2e2c;
-    --color-border-strong: #797771;
-    --color-brand: #74743a;
-    --color-accent: #a5a37c;
-    --color-accent-hover: #b4b191;
-    --color-accent-ink: #010101;
-    --color-accent-soft: #2f2f18;
-    --color-focus: #e8e3d8;
-    --color-success: #9bc47a;
-    --color-success-bg: #212c12;
-    --color-warn: #e4b863;
-    --color-warn-bg: #352810;
-    --color-error: #e88d83;
-    --color-error-bg: #3a1512;
-    --color-info-bg: #212111;
-    --color-scrim: rgb(1 1 1 / 0.78);
-    --color-on-scrim: var(--brand-beige);
-    --color-overlay: rgb(1 1 1 / 0.7);
-    --shadow-sm: 0 1px 2px rgb(1 1 1 / 0.6);
-    --shadow-md: 0 8px 24px rgb(1 1 1 / 0.7);
+    --color-bg: #111111;
+    --color-surface: #2f2f2f;
+    --color-surface-2: #202020;
+    --color-ink: #f6f6f6;
+    --color-muted: #bebebe;
+    --color-line: #2f2f2f;
+    --color-border-strong: #898989;
+    --color-link: #ffcb74;
+    --color-accent: #ffcb74;
+    --color-accent-hover: #fcd89b;
+    --color-accent-ink: #111111;
+    --color-accent-edge: #ffcb74;
+    --color-accent-soft: #372f21;
+    --color-accent-fg: #ffcb74;
+    --color-focus: #ffcb74;
+    --color-focus-inner: #111111;
+    --color-success: #7dca9c;
+    --color-success-bg: #1f3026;
+    --color-warn: #ffcb74;
+    --color-warn-bg: #372f21;
+    --color-error: #f19286;
+    --color-error-bg: #472320;
+    --color-info-bg: #222222;
+    --color-scrim: rgb(17 17 17 / 0.82);
+    --color-on-scrim: var(--brand-off-white);
+    --color-overlay: rgb(17 17 17 / 0.72);
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+    --shadow-md: 0 8px 24px rgb(0 0 0 / 0.6);
     --logo-light-display: none;
     --logo-dark-display: block;
   }
@@ -102,31 +111,34 @@
 
 /* dark theme: forced with data-theme="dark" */
 :root[data-theme="dark"] {
-  --color-bg: #010101;
-  --color-surface: #111110;
-  --color-surface-2: #1d1c1b;
-  --color-ink: #e8e3d8;
-  --color-muted: #a7a49c;
-  --color-line: #2f2e2c;
-  --color-border-strong: #797771;
-  --color-brand: #74743a;
-  --color-accent: #a5a37c;
-  --color-accent-hover: #b4b191;
-  --color-accent-ink: #010101;
-  --color-accent-soft: #2f2f18;
-  --color-focus: #e8e3d8;
-  --color-success: #9bc47a;
-  --color-success-bg: #212c12;
-  --color-warn: #e4b863;
-  --color-warn-bg: #352810;
-  --color-error: #e88d83;
-  --color-error-bg: #3a1512;
-  --color-info-bg: #212111;
-  --color-scrim: rgb(1 1 1 / 0.78);
-  --color-on-scrim: var(--brand-beige);
-  --color-overlay: rgb(1 1 1 / 0.7);
-  --shadow-sm: 0 1px 2px rgb(1 1 1 / 0.6);
-  --shadow-md: 0 8px 24px rgb(1 1 1 / 0.7);
+  --color-bg: #111111;
+  --color-surface: #2f2f2f;
+  --color-surface-2: #202020;
+  --color-ink: #f6f6f6;
+  --color-muted: #bebebe;
+  --color-line: #2f2f2f;
+  --color-border-strong: #898989;
+  --color-link: #ffcb74;
+  --color-accent: #ffcb74;
+  --color-accent-hover: #fcd89b;
+  --color-accent-ink: #111111;
+  --color-accent-edge: #ffcb74;
+  --color-accent-soft: #372f21;
+  --color-accent-fg: #ffcb74;
+  --color-focus: #ffcb74;
+  --color-focus-inner: #111111;
+  --color-success: #7dca9c;
+  --color-success-bg: #1f3026;
+  --color-warn: #ffcb74;
+  --color-warn-bg: #372f21;
+  --color-error: #f19286;
+  --color-error-bg: #472320;
+  --color-info-bg: #222222;
+  --color-scrim: rgb(17 17 17 / 0.82);
+  --color-on-scrim: var(--brand-off-white);
+  --color-overlay: rgb(17 17 17 / 0.72);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.6);
   --logo-light-display: none;
   --logo-dark-display: block;
 }

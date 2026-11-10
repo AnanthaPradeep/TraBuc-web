@@ -102,60 +102,90 @@ src/
 
 ## Design and theming
 
-The theme is the TRABUC brand palette: **black `#010101`, olive `#74743a`, beige `#e8e3d8`**. Every colour,
-font, spacing, radius and shadow is a CSS variable in `src/styles/tokens.css`, and no other stylesheet or
-component hard-codes a colour. The light theme (beige background, near-black text, olive accent) is the
-default; the dark theme (black background, beige text, lightened olive accent) applies automatically with
-`prefers-color-scheme: dark`, and either can be forced with `data-theme="light"` or `data-theme="dark"` on
-`<html>`.
+The theme is the TRABUC brand palette: **near black `#111111`, charcoal `#2f2f2f`, off white `#f6f6f6`, amber
+`#ffcb74`**. Every colour, font, spacing, radius and shadow is a CSS variable in `src/styles/tokens.css`, and no
+other stylesheet or component hard-codes a colour. The light theme (off-white background, near-black text) is the
+default; the dark theme (near-black background, charcoal surfaces, off-white text, amber accent) applies
+automatically with `prefers-color-scheme: dark`, and either can be forced with `data-theme="light"` or
+`data-theme="dark"` on `<html>`.
+
+### The amber rule
+
+Amber is 12.6:1 on `#111111` but only **1.4:1 on `#f6f6f6`**. So in the light theme amber is used **only as a fill**
+(primary buttons, selected chips, the avatar, soft highlights) with `#111111` text on it and a darker outline
+(`--color-accent-edge`). It is never text, a link or a thin icon there. Links, icons and active underlines use
+`--color-link` and `--color-accent-fg`, which are near black in light mode (links are always underlined) and amber
+in dark mode. If you add UI, use `--color-accent` for fills and `--color-accent-fg` / `--color-link` for anything thin.
 
 ### Tokens
 
-| Token (`--color-…`) | Light | Dark | Used for | How it was derived |
+| Token (`--color-…`) | Light | Dark | Used for | Notes |
 | --- | --- | --- | --- | --- |
-| `bg` | `#E8E3D8` | `#010101` | Page background | brand beige / brand black |
-| `surface` | `#F5F2ED` | `#111110` | Cards, inputs, menus | beige tinted toward white / black mixed with beige |
-| `surface-2` | `#DAD6C5` | `#1D1C1B` | Bands, footer, hover | beige mixed with olive / black mixed with beige |
-| `ink` | `#010101` | `#E8E3D8` | Body text | brand black / brand beige |
-| `muted` | `#464542` | `#A7A49C` | Secondary text | black mixed with beige |
-| `line` | `#BFBCA1` | `#2F2E2C` | Decorative dividers and card borders | beige mixed with olive / black mixed with beige |
-| `border-strong` | `#5F5F30` | `#797771` | Form-control and button borders (3:1 needed) | olive darkened with black / black mixed with beige |
-| `brand` | `#74743A` | `#74743A` | Large text, icons, art, decoration | brand olive #74743a (both themes) |
-| `accent` | `#464623` | `#A5A37C` | Links, primary buttons, small olive text | olive darkened with black / olive lightened with beige |
-| `accent-hover` | `#35351B` | `#B4B191` | Primary button hover | darker / lighter step of accent |
-| `accent-ink` | `#E8E3D8` | `#010101` | Text on accent | beige / black |
-| `accent-soft` | `#CECBB5` | `#2F2F18` | Soft olive fill (media, hover) | beige mixed with olive / black mixed with olive |
-| `focus` | `#010101` | `#E8E3D8` | Focus ring (3px, 2px offset) | black / beige |
-| `success, warn, error (+ -bg)` | `#305020`, `#684400`, `#8C241D` | `#9BC47A`, `#E4B863`, `#E88D83` | Notices and badges | semantic hues, not from the brand colours; tinted with beige/black |
-| `info-bg` | `#D5D1BF` | `#212111` | Info notices and Sample badge | beige mixed with olive / black mixed with olive |
+| `bg` | `#f6f6f6` | `#111111` | Page background |  |
+| `surface` | `#ffffff` | `#2f2f2f` | Cards, inputs, menus, dialogs | light: white, the lightest tint of off white / dark: charcoal |
+| `surface-2` | `#e6e6e6` | `#202020` | Bands, footer, hover | derived (mix of off white/charcoal, or black/charcoal) |
+| `ink` | `#111111` | `#f6f6f6` | Body text |  |
+| `muted` | `#2f2f2f` | `#bebebe` | Secondary text | light: charcoal / dark: derived (charcoal toward off white) |
+| `line` | `#cecece` | `#2f2f2f` | Dividers and card borders (decorative) | light: derived / dark: charcoal |
+| `border-strong` | `#2f2f2f` | `#898989` | Form-control and button borders (3:1) | light: charcoal / dark: derived |
+| `link` | `#111111` | `#ffcb74` | Links (always underlined) | light: near black / dark: amber |
+| `accent` | `#ffcb74` | `#ffcb74` | Fills: primary buttons, selected chips, avatar | amber (both themes) |
+| `accent-hover` | `#e2b568` | `#fcd89b` | Primary button hover | derived (amber toward black / off white) |
+| `accent-ink` | `#111111` | `#111111` | Text on amber | near black |
+| `accent-edge` | `#6b5837` | `#ffcb74` | Outline on amber fills (3:1 against the page) | light: derived (amber toward black) / dark: amber |
+| `accent-soft` | `#f9e9cf` | `#372f21` | Soft highlight fill (media, art, hover) | derived (amber tint) |
+| `accent-fg` | `#111111` | `#ffcb74` | Icons, active underline, art lines, notice bar | light: near black / dark: amber |
+| `focus / focus-inner` | `#111111` + `#ffcb74` | `#ffcb74` + `#111111` | Focus ring: 3px outer + 2px inner | light: near black + amber / dark: amber + near black |
+| `success, warn, error` | `#245739` `#413625` `#9d3126` | `#7dca9c` `#ffcb74` `#f19286` | Notice and badge text | success/error: semantic hues tinted with the palette; warn: derived from amber |
+| `success-bg, warn-bg, error-bg` | `#d6e3db` `#fae0b5` `#efdddc` | `#1f3026` `#372f21` `#472320` | Notice and badge backgrounds | derived tints |
+| `info-bg` | `#e2e2e2` | `#222222` | Info notices, Sample badge | derived |
 
-Olive `#74743a` alone is only 3.8:1 on beige (4.3:1 on black), and neither beige (3.8:1) nor black (4.3:1)
-text reaches 4.5:1 on it. So `--color-brand` (exact olive) is used only for large text, icons, borders and
-art, while text, links and buttons use `--color-accent`. All text pairings in both themes are 4.5:1 or
-better and control borders and focus rings are 3:1 or better. The whole site was audited in headless Chrome
-at 320, 375, 768, 1024 and 1440 px in both themes (computed text contrast, horizontal overflow, logo
-visibility); the exact ratios are in the pull request / commit notes.
+Derived colours are mixes of the four brand colours (white is used only as the lightest tint of off white). Success
+and error are the only hues that cannot come from the palette, so they are semantic colours tinted to sit in it.
+
+### Contrast (WCAG)
+
+| Pairing | Light | Dark | Needs |
+| --- | --- | --- | --- |
+| ink on bg | 17.5 | 17.5 | 4.5:1 |
+| ink on surface | 18.9 | 12.4 | 4.5:1 |
+| muted on bg | 12.4 | 10.2 | 4.5:1 |
+| muted on surface | 13.4 | 7.2 | 4.5:1 |
+| muted on surface-2 | 10.7 | 8.8 | 4.5:1 |
+| link on bg | 17.5 | 12.6 | 4.5:1 |
+| link on surface | 18.9 | 9.0 | 4.5:1 |
+| accent-ink on accent (primary button) | 12.6 | 12.6 | 4.5:1 |
+| accent-ink on accent-hover | 9.9 | 13.9 | 4.5:1 |
+| success / warn / error text on their tint | 6.4 / 9.2 / 5.5 | 7.2 / 8.8 / 6.0 | 4.5:1 |
+| border-strong on bg / surface (controls) | 12.4 / 13.4 | 5.4 / 3.8 | 3:1 |
+| accent-edge on bg (primary button outline) | 6.3 | 12.6 | 3:1 |
+| accent-fg on bg (icons, underline) | 17.5 | 12.6 | 3:1 |
+| focus ring on bg | 17.5 | 12.6 | 3:1 |
+| focus ring on surface | 18.9 | 9.0 | 3:1 |
+
+Every text pairing is at least 4.5:1 and every control border, outline and focus ring at least 3:1, in both themes.
+The whole site was also audited in headless Chrome at 320, 375, 768, 1024 and 1440 px in both themes (computed text
+contrast on every text node, horizontal overflow, logo visibility).
 
 ### Changing the brand
 
-1. Edit the three `--brand-*` values and the `--color-*` values in `src/styles/tokens.css` (the light values
-   are in `:root`; the dark values appear twice, in the `prefers-color-scheme` block and in
-   `:root[data-theme="dark"]`, so keep them in sync).
-2. Re-check contrast (text 4.5:1, large text and UI borders 3:1) before committing.
+1. Edit the `--brand-*` values and the `--color-*` values in `src/styles/tokens.css` (light values are in `:root`;
+   the dark values appear twice, in the `prefers-color-scheme` block and in `:root[data-theme="dark"]`, so keep them in sync).
+2. Re-check contrast (text 4.5:1; large text, control borders and focus rings 3:1) before committing.
 3. Update `theme-color` in `index.html`.
 
 ### Logo and icons
 
-- `src/assets/brand/logo-horizontal-light.svg` (black `#010101`, for the light theme) and
-  `logo-horizontal-dark.svg` (beige `#e8e3d8`, for the dark theme) are rendered by
-  `src/components/Logo.tsx`, imported through Vite so they are hashed and cached. CSS shows the one that
-  matches the theme. The link has the accessible name "TRABUC home", and a text "TRABUC" is shown if the image fails.
-- `public/favicon.svg`, `public/favicon-32.png` and `public/apple-touch-icon.png` are the TB icon in beige on a
-  black tile.
-- These are recoloured, size-optimised copies of the horizontal logo and icon from the original
-  `TraBuc_Playful_Logo_Kit` (kept outside the repo, unmodified). The kit's own README says the artwork was
-  auto-traced from an AI-generated concept, is not an editable vector master, and has no trademark check.
-  Have it reviewed (and ideally redrawn) before large-scale printing or filing a trademark.
+- `src/assets/brand/logo-horizontal-light.svg` (`#111111`, for the light theme) and `logo-horizontal-dark.svg`
+  (amber `#ffcb74`, for the dark theme) are rendered by `src/components/Logo.tsx`, imported through Vite so they
+  are hashed and cached. CSS shows the one that matches the theme. The link is named "TRABUC home", and the text
+  "TRABUC" is shown if the image fails. For an off-white logo on dark instead, swap the fill in the dark file to `#f6f6f6`.
+- `public/favicon.svg` is the TB icon in amber on a near-black tile. `public/favicon-32.png` and
+  `public/apple-touch-icon.png` are the kit's own 32 px and 180 px app icons.
+- The SVGs are size-optimised copies (110 KB down to 37 KB) of the horizontal logo from the original
+  `TraBuc_Playful_Logo_Kit` (kept outside the repo, unmodified). The kit's own README says the artwork was auto-traced
+  from an AI-generated concept, is not an editable vector master, and has no trademark check. Have it reviewed (and
+  ideally redrawn) before large-scale printing or filing a trademark.
 
 Plain CSS is used instead of Tailwind to keep dependencies small.
 
